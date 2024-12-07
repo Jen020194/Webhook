@@ -1,11 +1,14 @@
-
 pipeline {
     agent any
 
     stages {
         stage('Initialize Environment') {
             steps {
-                echo 'Step 1: Setting up the environment...'
+                echo 'Step 1: Checking system requirements...'
+                echo 'Step 2: Validating environment variables...'
+                echo 'Step 3: Setting up directories and permissions...'
+                echo 'Step 4: Ensuring network connectivity...'
+                echo 'Environment setup completed successfully.'
             }
         }
         stage('Prepare Codebase') {
@@ -99,5 +102,19 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            echo 'Pipeline execution completed.'
+            emailext(
+                to: 'jeniferjeganathan94@gmail.com',
+                subject: "Pipeline Build Notification - ${currentBuild.fullDisplayName}",
+                body: """\
+                <p>The pipeline build has completed:</p>
+                <p>Status: ${currentBuild.currentResult}</p>
+                <p>Check the build details <a href="${env.BUILD_URL}">here</a>.</p>
+                """,
+                mimeType: 'text/html'
+            )
+        }
+    }
 }
-
